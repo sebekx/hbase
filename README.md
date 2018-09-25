@@ -32,11 +32,10 @@ hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=',' -Dim
 ```
 get 'measurements', '182017-07-23 15:25:00'
 scan 'measurements'
-scan 'measurements', { LIMIT=>10, COLUMNS => 'measurement:deviceid', FILTER => "ValueFilter(=, 'binary:86')"}
 scan 'measurements', { LIMIT=>10, FILTER => "SingleColumnValueFilter('measurement','deviceid',=, 'binary:86')"}
-scan 'measurements', { LIMIT=>1000, FILTER => "(SingleColumnValueFilter('measurement','deviceid',=, 'binary:86') AND SingleColumnValueFilter('measurement','readingdatetime',>, 'binary:2018-09-01 00:00:00'))"}
+scan 'measurements', { LIMIT=>10, FILTER => "(SingleColumnValueFilter('measurement','deviceid',=, 'binary:86') AND SingleColumnValueFilter('measurement','readingdatetime',>, 'binary:2018-09-01 00:00:00'))"}
 count 'measurements'
-count 'measurements', INTERVAL => 100000
+count 'measurements', INTERVAL => 10000
 ```
 
 ## Phoenix
