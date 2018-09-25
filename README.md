@@ -76,3 +76,35 @@ FROM MEASUREMENTS
 --17884800 
 ```
 
+## Hive integration
+Hive:
+```SQL
+CREATE EXTERNAL TABLE default.measurements(
+  id string,
+  deviceid int,
+  readingdatetime string,
+  value int)
+STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' 
+WITH SERDEPROPERTIES ("hbase.columns.mapping"=":key,measurement:deviceid,measurement:readingdatetime,measurement:value") 
+TBLPROPERTIES ("hbase.table.name"="measurements");
+```
+Phoenix (4.8.0+):
+```SQL
+CREATE EXTERNAL TABLE ext_table (
+  i1 int,
+  s1 string,
+  f1 float,
+  d1 decimal
+)
+STORED BY 'org.apache.phoenix.hive.PhoenixStorageHandler'
+TBLPROPERTIES (
+  "phoenix.table.name" = "ext_table",
+  "phoenix.zookeeper.quorum" = "localhost",
+  "phoenix.zookeeper.znode.parent" = "/hbase",
+  "phoenix.zookeeper.client.port" = "2181",
+  "phoenix.rowkeys" = "i1",
+  "phoenix.column.mapping" = "i1:i1, s1:s1, f1:f1, d1:d1"
+);
+```
+
+
