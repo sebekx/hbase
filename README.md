@@ -43,10 +43,36 @@ sqlline tool: ```python /usr/hdp/current/phoenix-client/bin/sqlline.py```
 ```SQL
 !tables
 
-CREATE TABLE measurements (DEVICEID INTEGER NOT NULL, READINGDATETIME DATE NOT NULL, "VALUE" INTEGER CONSTRAINT PK PRIMARY KEY (DEVICEID, READINGDATETIME ROW_TIMESTAMP)) IMMUTABLE_ROWS=true,DISABLE_WAL=true,IMMUTABLE_STORAGE_SCHEME = SINGLE_CELL_ARRAY_WITH_OFFSETS,COLUMN_ENCODED_BYTES = 1, SALT_BUCKETS = 4;     
+CREATE TABLE measurements (
+ DEVICEID INTEGER NOT NULL, 
+ READINGDATETIME DATE NOT NULL, 
+ "VALUE" INTEGER 
+ CONSTRAINT PK PRIMARY KEY (
+   DEVICEID, 
+   READINGDATETIME ROW_TIMESTAMP)) 
+IMMUTABLE_ROWS=true,
+DISABLE_WAL=true,
+IMMUTABLE_STORAGE_SCHEME = SINGLE_CELL_ARRAY_WITH_OFFSETS,
+COLUMN_ENCODED_BYTES = 1, 
+SALT_BUCKETS = 4;     
 
 ```
 bulk load:
 ```sh
-hadoop jar phoenix-4.7.0.2.6.5.3003-25-client.jar org.apache.phoenix.mapreduce.CsvBulkLoadTool --table measurements --input adl://adlsdemos.azuredatalakestore.net/sampledata/hba se_sample/part* -zookeeper zk0-demo-l.fldjsksdsfke3o4kh1k5qsqqrh.fx.internal.cloudapp.net:/hbase-unsecure -ignore-errors
+hadoop jar phoenix-4.7.0.2.6.5.3003-25-client.jar org.apache.phoenix.mapreduce.CsvBulkLoadTool --table measurements --input adl://adlsdemos.azuredatalakestore.net/sampledata/sample/part* -zookeeper zk0-demo-l.fldjsksdsfke3o4kh1k5qsqqrh.fx.internal.cloudapp.net:/hbase-unsecure -ignore-errors
 ```
+
+query:
+```SQL
+SELECT * 
+FROM MEASUREMENTS 
+WHERE DEVICEID = 86 AND READINGDATETIME> TO_DATE('2018-09-01') 
+ORDER BY READINGDATETIME 
+LIMIT 1000;
+
+-- 1 row selected (14.657 seconds)
+SELECT COUNT(*) 
+FROM MEASUREMENTS
+--17884800 
+```
+
