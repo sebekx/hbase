@@ -65,6 +65,7 @@ SALT_BUCKETS = 4;
 ```
 bulk load:
 ```sh
+~3 min!
 hadoop jar phoenix-4.7.0.2.6.5.3003-25-client.jar org.apache.phoenix.mapreduce.CsvBulkLoadTool 
 --table measurements 
 --input adl://adlsdemos.azuredatalakestore.net/sampledata/sample/part* 
