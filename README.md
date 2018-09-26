@@ -24,6 +24,7 @@ create 'measurements', 'measurement'
 ```
 bulk load:
 ``` 
+-- ~3min!
 hbase org.apache.hadoop.hbase.mapreduce.ImportTsv 
 -Dimporttsv.separator=',' 
 -Dimporttsv.columns=HBASE_ROW_KEY,measurement:deviceid,measurement:readingdatetime,measurement:value 
@@ -106,6 +107,7 @@ index:
 ```SQL
 CREATE INDEX IDX ON MEASUREMENTS("VALUE") INCLUDE(READINGDATETIME) ASYNC
 
+-- ~3min!
 hbase org.apache.phoenix.mapreduce.index.IndexTool --data-table MEASUREMENTS --index-table ASYNC_IDX --output-path ASYNC_IDX_HFILES
 
 EXPLAIN SELECT DEVICEID FROM MEASUREMENTS WHERE "VALUE" = 583 LIMIT 10;
