@@ -24,7 +24,11 @@ create 'measurements', 'measurement'
 ```
 bulk load:
 ``` 
-hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=',' -Dimporttsv.columns=HBASE_ROW_KEY,measurement:deviceid,measurement:readingdatetime,measurement:value measurements adl://adlsdemos.azuredatalakestore.net/sampledata/hbase_sample/part* 
+hbase org.apache.hadoop.hbase.mapreduce.ImportTsv 
+-Dimporttsv.separator=',' 
+-Dimporttsv.columns=HBASE_ROW_KEY,measurement:deviceid,measurement:readingdatetime,measurement:value 
+measurements 
+adl://adlsdemos.azuredatalakestore.net/sampledata/hbase_sample/part* 
 ```
 
   * query:
@@ -32,6 +36,7 @@ hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=',' -Dim
 ```
 get 'measurements', '182017-07-23 15:25:00'
 scan 'measurements'
+--10 row(s) in 69.2250 seconds
 scan 'measurements', { LIMIT=>10, FILTER => "SingleColumnValueFilter('measurement','deviceid',=, 'binary:86')"}
 scan 'measurements', { LIMIT=>10, FILTER => "(SingleColumnValueFilter('measurement','deviceid',=, 'binary:86') AND SingleColumnValueFilter('measurement','readingdatetime',>, 'binary:2018-09-01 00:00:00'))"}
 count 'measurements'
@@ -60,7 +65,11 @@ SALT_BUCKETS = 4;
 ```
 bulk load:
 ```sh
-hadoop jar phoenix-4.7.0.2.6.5.3003-25-client.jar org.apache.phoenix.mapreduce.CsvBulkLoadTool --table measurements --input adl://adlsdemos.azuredatalakestore.net/sampledata/sample/part* -zookeeper zk0-demo-l.fldjsksdsfke3o4kh1k5qsqqrh.fx.internal.cloudapp.net:/hbase-unsecure -ignore-errors
+hadoop jar phoenix-4.7.0.2.6.5.3003-25-client.jar org.apache.phoenix.mapreduce.CsvBulkLoadTool 
+--table measurements 
+--input adl://adlsdemos.azuredatalakestore.net/sampledata/sample/part* 
+--zookeeper zk0-demo-l.fldjsksdsfke3o4kh1k5qsqqrh.fx.internal.cloudapp.net:/hbase-unsecure 
+--ignore-errors
 ```
 
 query:
