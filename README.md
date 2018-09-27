@@ -50,7 +50,7 @@ sqlline tool: ```python /usr/hdp/current/phoenix-client/bin/sqlline.py```
 ```SQL
 !tables
 
-CREATE TABLE measurements (
+CREATE TABLE MEASUREMENTS_NOIDX (
  DEVICEID INTEGER NOT NULL, 
  READINGDATETIME DATE NOT NULL, 
  "VALUE" INTEGER 
